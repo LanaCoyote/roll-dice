@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>Roll Dice</title>
+
+    <link rel="stylesheet" type="text/css" href="static/style.css"
+  </head>
+
+  <body>
+    <div id="cheatsheet">
+      <h1>Cheatsheet</h1>
+      <hr>
+      <table>
+        <tr><th colspan="2">Dice</th></tr>
+        <tr><td class="command">&lt;N&gt;d&lt;S&gt;</td><td>Roll N S-sided dice<br /><em>e.g. 2d6 rolls 2 six-sided dice</em></td></tr>
+        <tr><td class="command">...e&lt;E&gt;</td><td>Dice explode (are rerolled) if they're greater than or equal to E<br /><em>e.g. 5d10e10 rolls 5 ten-sided dice and rerolls them if their result is 10</em></td></tr>
+        <tr><td class="command">...f&lt;F&gt;</td><td>Critically fails if the dice roll less than or equal to F<br /><em>e.g. 5d10f1 rolls 5 ten-sided dice and keeps track of the 1's</em></td></tr>
+        <tr><td class="command">...h&lt;H&gt;</td><td>Counts as a hit if the dice roll greater than or equal to H<br /><em>e.g. 5d10h8 rolls 5 ten-sided dice and keeps track of any rolls 8 or over</em></td></tr>
+      </table>
+    </div>
+
+    <div id="title">
+      <h1>Roll Dice</h1>
+      <p>Online dice roller</p>
+    </div>
+
+    <div id="input">
+      <p>What do you want to roll?</p>
+      <form action="roll" method="get">
+        <input type="text" placeholder="Enter a dice expression (e.g. 2d6+1d4+3)" name="expr" value="{{ expr }}">
+        <input type="submit" value="Roll Dice">
+      </form>
+      <p class="controls"><a href="javascript:void" onclick="toggle_cheatsheet">toggle cheatsheet</a></p>
+    </div>
+
+    {% if diceset %}
+    <div id="output">
+      <table>
+        <tr class="input">
+          <th>Input</th>
+          <td>{{ expr }}</td>
+        </tr>
+        <tr class="interpretation">
+          <th>Interpreted As</th>
+          <td>{{ diceset.pretty() }}</td>
+        </tr>
+        <tr class="result">
+          <th>Result</th>
+          <td>{{ diceset }}</td>
+        </tr>
+        {% if diceset.can_hit %}<tr class="hits">
+          <th>Hits</th>
+          <td>{{ diceset.hits() }}</td>
+        </tr>{% endif %}
+        {% if diceset.can_fail %}<tr class="fails">
+          <th>Critical Failures</th>
+          <td>{{ diceset.failures() }}</td>
+        </tr>{% endif %}
+        <tr class="total">
+          <th>Total</th>
+          <td>{{ diceset.total() }}</td> 
+        </tr>
+      </table>
+    </div>
+    {% endif %}
+  </body>
+</html>
